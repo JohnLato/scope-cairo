@@ -13,11 +13,9 @@ import qualified Graphics.UI.Gtk as G
 import System.Environment (getArgs)
 
 import Paths_scope_cairo as My
-import Scope.Layer
 import Scope.Types
 
 import Scope.Cairo
-import Scope.Numeric.IEEE754
 
 ----------------------------------------------------------------------
 

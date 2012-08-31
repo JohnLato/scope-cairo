@@ -34,8 +34,8 @@ scopeModifyUpdate ref f = do
 
 viewCairoUpdate :: View ViewCairo -> IO ()
 viewCairoUpdate View{..} = do
-    G.adjustmentSetValue (adj viewUI) (toDouble viewX1)
-    G.adjustmentSetPageSize (adj viewUI) $ toDouble (distance viewX1 viewX2)
+    G.adjustmentSetValue (adj viewUI) (unDataX $ rangeStart viewX)
+    G.adjustmentSetPageSize (adj viewUI) $ unDataX $ snd $ toSpan viewX
     G.widgetQueueDraw (canvas viewUI)
 
 modifyIORefM :: MonadIO m => IORef a -> (a -> m a) -> m ()

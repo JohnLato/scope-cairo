@@ -1,6 +1,6 @@
 Name:                scope-cairo
 
-Version:             0.8.0.0
+Version:             0.9.0.0
 
 Synopsis:            An interactive renderer for plotting time-series data
 
@@ -74,7 +74,7 @@ Library
     MonadCatchIO-transformers >  0.2     && < 0.4,
     mtl                       >= 2.0.0.0 && < 3,
     old-locale,
-    scope                     >= 0.8.0.0 && < 0.9,
+    scope                     >= 0.9.0.0 && < 0.10,
     time,
     zoom-cache                >= 1.2.0.0 && < 1.3.0.0
 
@@ -83,7 +83,6 @@ Library
     Scope.Cairo.Events
     Scope.Cairo.IORef
     Scope.Cairo.Plot
-    Scope.Cairo.Render
     Scope.Cairo.Types
 
 Executable scope-cairo
@@ -102,7 +101,7 @@ Executable scope-cairo
     MonadCatchIO-transformers >  0.2     && < 0.4,
     mtl                       >= 2.0.0.0 && < 3,
     old-locale,
-    scope                     >= 0.8.0.0 && < 0.9,
+    scope                     >= 0.9.0.0 && < 0.10,
     time,
     zoom-cache                >= 1.2.0.0 && < 1.3.0.0
 

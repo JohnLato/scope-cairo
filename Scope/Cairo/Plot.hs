@@ -19,12 +19,10 @@ import qualified Graphics.Rendering.Cairo as C
 import qualified Graphics.Rendering.Cairo.Matrix as M
 import System.Locale (defaultTimeLocale)
 
-import Scope.Layer
 import Scope.Types
 import Scope.View
 
 import Scope.Cairo.IORef
-import Scope.Cairo.Render
 import Scope.Cairo.Types
 
 ----------------------------------------------------------------
