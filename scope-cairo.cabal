@@ -74,7 +74,7 @@ Library
     MonadCatchIO-transformers >  0.2     && < 0.4,
     mtl                       >= 2.0.0.0 && < 3,
     old-locale,
-    scope                     >= 0.8.0.0 && < 0.9,
+    scope                     >= 0.9.0.0 && < 0.10,
     time,
     zoom-cache                >= 1.2.0.0 && < 1.3.0.0
 
@@ -102,7 +102,7 @@ Executable scope-cairo
     MonadCatchIO-transformers >  0.2     && < 0.4,
     mtl                       >= 2.0.0.0 && < 3,
     old-locale,
-    scope                     >= 0.8.0.0 && < 0.9,
+    scope                     >= 0.9.0.0 && < 0.10,
     time,
     zoom-cache                >= 1.2.0.0 && < 1.3.0.0
 
