@@ -12,7 +12,6 @@ module Scope.Cairo (
     , module Scope.Cairo.Types
 ) where
 
-import Control.Monad.Reader
 import Data.IORef
 import qualified Graphics.UI.Gtk as G
 

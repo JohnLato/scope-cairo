@@ -11,7 +11,6 @@ module Scope.Cairo.Plot (
 
 import Control.Monad.Reader
 import Data.IORef
-import Data.Maybe
 import Data.Time (UTCTime, formatTime)
 import Data.ZoomCache (TimeStamp(..), prettyTimeStamp)
 import qualified Graphics.UI.Gtk as G

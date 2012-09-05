@@ -6,7 +6,6 @@ module Main (
 ) where
 
 import Control.Applicative ((<$>))
-import Control.Monad.Reader
 import Data.IORef
 import Data.Maybe
 import qualified Graphics.UI.Gtk as G
