@@ -18,14 +18,14 @@ import Scope.Cairo.Types
 
 ----------------------------------------------------------------
 
-scopeModifyMUpdate :: IORef (Scope ViewCairo)
-                   -> (Scope ViewCairo -> IO (Scope ViewCairo))
+scopeModifyMUpdate :: IORef (Scope diag ViewCairo)
+                   -> (Scope diag ViewCairo -> IO (Scope diag ViewCairo))
                    -> IO ()
 scopeModifyMUpdate ref f = do
     modifyIORefM ref f
     viewCairoUpdate =<< view <$> readIORef ref
 
-scopeModifyUpdate :: IORef (Scope ViewCairo)
+scopeModifyUpdate :: IORef (Scope diag ViewCairo)
                   -> (View ViewCairo -> View ViewCairo)
                   -> IO ()
 scopeModifyUpdate ref f = do
