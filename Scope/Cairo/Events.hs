@@ -22,7 +22,7 @@ import Scope.Cairo.Types
 
 ----------------------------------------------------------------
 
-scopeCairoDefaultEvents :: IORef (Scope ViewCairo) -> IO ()
+scopeCairoDefaultEvents :: IORef (ScopeDiag ViewCairo) -> IO ()
 scopeCairoDefaultEvents scopeRef = do
     ViewCairo{..} <- viewUI . view <$> readIORef scopeRef
 
@@ -51,7 +51,7 @@ scopeCairoDefaultEvents scopeRef = do
 
 ----------------------------------------------------------------
 
-scroll :: IORef (Scope ViewCairo) -> IO ()
+scroll :: IORef (Scope diag ViewCairo) -> IO ()
 scroll ref = do
     val <- G.adjustmentGetValue =<< adj . viewUI . view <$> readIORef ref
     scopeModifyUpdate ref (viewMoveTo val)
@@ -70,7 +70,7 @@ screenToCanvas vc (ScreenX sX) = do
 
 ----------------------------------------------------------------
 
-buttonDown :: IORef (Scope ViewCairo) -> G.EventM G.EButton ()
+buttonDown :: IORef (Scope diag ViewCairo) -> G.EventM G.EButton ()
 buttonDown ref = do
     (x, _y) <- G.eventCoordinates
     liftIO $ do
@@ -78,10 +78,10 @@ buttonDown ref = do
         cX <- screenToCanvas vc (ScreenX x)
         scopeModifyUpdate ref (viewButtonDown cX)
 
-buttonRelease :: IORef (Scope ViewCairo) -> G.EventM G.EButton ()
+buttonRelease :: IORef (Scope diag ViewCairo) -> G.EventM G.EButton ()
 buttonRelease ref = liftIO $ modifyIORef ref (scopeModifyView viewButtonRelease)
 
-motion :: IORef (Scope ViewCairo) -> G.EventM G.EMotion ()
+motion :: IORef (Scope diag ViewCairo) -> G.EventM G.EMotion ()
 motion ref = do
     (x, _y) <- G.eventCoordinates
     liftIO $ do
@@ -89,7 +89,7 @@ motion ref = do
         cX <- screenToCanvas viewUI (ScreenX x)
         scopeModifyUpdate ref (viewButtonMotion cX)
 
-wheel :: IORef (Scope ViewCairo) -> G.EventM G.EScroll ()
+wheel :: IORef (Scope diag ViewCairo) -> G.EventM G.EScroll ()
 wheel ref = do
     (x, _y) <- G.eventCoordinates
     dir <- G.eventScrollDirection
@@ -115,7 +115,7 @@ wheel ref = do
 #define XK_Page_Down                     0xff56
 #define XK_End                           0xff57  /* EOL */
 
-keyDown :: IORef (Scope ViewCairo) -> G.EventM G.EKey ()
+keyDown :: IORef (Scope diag ViewCairo) -> G.EventM G.EKey ()
 keyDown ref = do
     v <- G.eventKeyVal
     -- n <- G.eventKeyName

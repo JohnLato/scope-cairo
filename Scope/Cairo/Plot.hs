@@ -1,4 +1,6 @@
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE ViewPatterns #-}
+
 {-# OPTIONS -Wall #-}
 
 module Scope.Cairo.Plot (
@@ -17,8 +19,15 @@ import Data.ZoomCache (TimeStamp(..), prettyTimeStamp)
 import qualified Graphics.UI.Gtk as G
 import qualified Graphics.Rendering.Cairo as C
 import qualified Graphics.Rendering.Cairo.Matrix as M
+
+import qualified Diagrams.Backend.Cairo as B
+import qualified Diagrams.Backend.Cairo.Gtk as B
+import qualified Diagrams.Backend.Cairo.Internal as B
+import Diagrams.Prelude hiding (view)
+
 import System.Locale (defaultTimeLocale)
 
+import Scope.Layer
 import Scope.Types
 import Scope.View
 
@@ -27,33 +36,33 @@ import Scope.Cairo.Types
 
 ----------------------------------------------------------------
 
-updateCanvas :: IORef (Scope ViewCairo) -> IO Bool
+updateCanvas :: IORef (ScopeDiag ViewCairo) -> IO Bool
 updateCanvas ref = do
     scope <- readIORef ref
     let c = canvas . viewUI . view $ scope
     win <- G.widgetGetDrawWindow c
     (width, height) <- G.widgetGetSize c
-    G.renderWithDrawable win $ plotWindow width height ref
+    diag <- plotWindow width height scope
+    B.renderToGtk win diag
     return True
 
-writePng :: FilePath -> IORef (Scope ViewCairo) -> IO ()
+writePng :: FilePath -> IORef (ScopeDiag ViewCairo) -> IO ()
 writePng path ref = do
     scope <- readIORef ref
     let c = canvas . viewUI . view $ scope
     (width, height) <- G.widgetGetSize c
-    C.withImageSurface C.FormatARGB32 width height $ \ result -> do
-        C.renderWith result $ plotWindow width height ref
-        C.surfaceWriteToPNG result path
+    let dims = Dims (fromIntegral width) (fromIntegral height)
+    diag <- plotWindow width height scope
+    fst $ renderDia B.Cairo (B.CairoOptions path dims B.PNG) diag
 
 ----------------------------------------------------------------
 
-plotWindow :: Int -> Int -> IORef (Scope ViewCairo) -> C.Render ()
-plotWindow width height ref = do
-    scope <- liftIO $ readIORef ref
-    prologue width height
-    modifyIORefM ref plotLayers
-    plotTimeline scope
-    plotCursor scope
+plotWindow :: Int -> Int -> ScopeDiag ViewCairo -> IO (Diagram B.Cairo R2)
+plotWindow width height scope = do
+    -- prologue width height
+    scopeRender width scope
+    -- plotTimeline scope
+    -- plotCursor scope
 
 -- Set up stuff
 prologue :: Int -> Int -> C.Render ()
@@ -80,7 +89,7 @@ prologue wWidth wHeight = do
 
 ----------------------------------------------------------------------
 
-plotCursor :: Scope ViewCairo -> C.Render ()
+plotCursor :: Scope diag ViewCairo -> C.Render ()
 plotCursor scope = maybe (return ()) f pointerX
     where
         View{..} = view scope
@@ -93,6 +102,7 @@ plotCursor scope = maybe (return ()) f pointerX
 
 ----------------------------------------------------------------------
 
+{-
 class Coordinate a => Timelineable a where
     timeLabel :: a -> String
     toCanvas :: Scope ui -> a -> CanvasX
@@ -171,6 +181,7 @@ plotTimeline scope = do
         plotLabel _unify ts = do
             let CanvasX cX = toCanvas scope ts
             drawString (timeLabel ts) cX (-0.44)
+            -}
 
 drawString :: String -> Double -> Double -> C.Render ()
 drawString s x y = do
@@ -187,5 +198,4 @@ plotArrow (CanvasX cX) = do
     C.lineTo (cX+0.004) (0.99)
     C.lineTo cX (0.98)
     C.fill
-
 

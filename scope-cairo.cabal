@@ -98,6 +98,8 @@ Executable scope-cairo
   Build-Depends:
     cairo,
     gtk,
+    diagrams-cairo,
+    diagrams-lib,
     MonadCatchIO-transformers >  0.2     && < 0.4,
     mtl                       >= 2.0.0.0 && < 3,
     old-locale,
