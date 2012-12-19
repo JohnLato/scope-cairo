@@ -123,9 +123,7 @@ main = do
   G.mainGUI
 
 myQuit :: G.WidgetClass cls => IORef (Scope ViewCairo) -> cls -> IO ()
-myQuit scopeRef window = do
-  scopeModifyMUpdate scopeRef scopeClose
-  G.widgetDestroy window
+myQuit scopeRef window = G.widgetDestroy window
 
 myNew :: IO ()
 myNew = putStrLn "New"

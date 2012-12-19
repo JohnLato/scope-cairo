@@ -23,7 +23,7 @@ import qualified Graphics.Rendering.Cairo.Matrix as M
 import qualified Diagrams.Backend.Cairo as B
 import qualified Diagrams.Backend.Cairo.Gtk as B
 import qualified Diagrams.Backend.Cairo.Internal as B
-import Diagrams.Prelude hiding (view)
+import Diagrams.Prelude (SizeSpec2D(..), Diagram, R2, renderDia)
 
 import System.Locale (defaultTimeLocale)
 

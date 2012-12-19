@@ -25,7 +25,7 @@ import Scope.Cairo.Types
 
 ----------------------------------------------------------------------
 
-scopeCairoNew :: IO (IORef (Scope ViewCairo))
+scopeCairoNew :: IO (IORef (ScopeDiag ViewCairo))
 scopeCairoNew = do
     vbox <- G.vBoxNew False 0
 
