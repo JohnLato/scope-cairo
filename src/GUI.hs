@@ -14,8 +14,11 @@ import System.Environment (getArgs)
 
 import Paths_scope_cairo as My
 import Scope.Types
+import Scope.Sources.ZoomCache
+import Scope.Plots.TwoD
 
 import Scope.Cairo
+import Data.ZoomCache.Common (TimeStamp (..))
 
 ----------------------------------------------------------------------
 
@@ -107,7 +110,7 @@ main = do
 
   quita `G.on` G.actionActivated $ myQuit scopeRef window
 
-  mapM_ (modifyIORefM scopeRef . addLayersFromFile scopeReadDouble) args
+  mapM_ (modifyIORefM scopeRef . addLayersFromFile myDodgyPlot) args
   openDialog `G.on` G.response $ myFileOpen scopeRef openDialog
   saveDialog `G.on` G.response $ myFileSave scopeRef saveDialog
 
@@ -122,22 +125,24 @@ main = do
   G.widgetShowAll window
   G.mainGUI
 
-myQuit :: G.WidgetClass cls => IORef (Scope ViewCairo) -> cls -> IO ()
+myQuit :: G.WidgetClass cls => IORef (ScopeDiag ViewCairo) -> cls -> IO ()
 myQuit scopeRef window = G.widgetDestroy window
 
 myNew :: IO ()
 myNew = putStrLn "New"
 
-myFileOpen :: IORef (Scope ViewCairo) -> G.FileChooserDialog -> G.ResponseId -> IO ()
+myDodgyPlot = mapPlot (\(TS d) -> d) id linePlot
+
+myFileOpen :: IORef (ScopeDiag ViewCairo) -> G.FileChooserDialog -> G.ResponseId -> IO ()
 myFileOpen scopeRef fcdialog response = do
   case response of
     G.ResponseAccept -> do
         Just filename <- G.fileChooserGetFilename fcdialog
-        scopeModifyMUpdate scopeRef (addLayersFromFile scopeReadDouble filename)
+        scopeModifyMUpdate scopeRef (addLayersFromFile myDodgyPlot filename)
     _ -> return ()
   G.widgetHide fcdialog
 
-myFileSave :: IORef (Scope ViewCairo) -> G.FileChooserDialog -> G.ResponseId -> IO ()
+myFileSave :: IORef (ScopeDiag ViewCairo) -> G.FileChooserDialog -> G.ResponseId -> IO ()
 myFileSave scopeRef fcdialog response = do
   case response of
     G.ResponseAccept -> do

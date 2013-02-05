@@ -21,7 +21,7 @@ import qualified Graphics.Rendering.Cairo as C
 import qualified Graphics.Rendering.Cairo.Matrix as M
 
 import qualified Diagrams.Backend.Cairo as B
-import qualified Diagrams.Backend.Cairo.Gtk as B
+import qualified Diagrams.Backend.Gtk as B
 import qualified Diagrams.Backend.Cairo.Internal as B
 import Diagrams.Prelude (SizeSpec2D(..), Diagram, R2, renderDia)
 
@@ -53,7 +53,7 @@ writePng path ref = do
     (width, height) <- G.widgetGetSize c
     let dims = Dims (fromIntegral width) (fromIntegral height)
     diag <- plotWindow width height scope
-    fst $ renderDia B.Cairo (B.CairoOptions path dims B.PNG) diag
+    fst $ renderDia B.Cairo (B.CairoOptions path dims B.PNG True) diag
 
 ----------------------------------------------------------------
 

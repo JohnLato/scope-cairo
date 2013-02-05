@@ -70,6 +70,9 @@ Library
 
   Build-Depends:
     cairo,
+    diagrams-cairo            >= 0.6     && < 0.7,
+    diagrams-gtk              >= 0.6     && < 0.7,
+    diagrams-lib              >= 0.6     && < 0.7,
     gtk,
     MonadCatchIO-transformers >  0.2     && < 0.4,
     mtl                       >= 2.0.0.0 && < 3,
@@ -98,7 +101,8 @@ Executable scope-cairo
   Build-Depends:
     cairo,
     gtk,
-    diagrams-cairo,
+    diagrams-cairo            == 0.6.*,
+    diagrams-gtk              == 0.6.*,
     diagrams-lib,
     MonadCatchIO-transformers >  0.2     && < 0.4,
     mtl                       >= 2.0.0.0 && < 3,
