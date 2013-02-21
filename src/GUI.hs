@@ -9,6 +9,7 @@ import Control.Applicative ((<$>))
 import Control.Monad.Reader
 import Data.IORef
 import Data.Maybe
+import qualified Diagrams.Prelude as D
 import qualified Graphics.UI.Gtk as G
 import System.Environment (getArgs)
 
@@ -131,7 +132,7 @@ myQuit scopeRef window = G.widgetDestroy window
 myNew :: IO ()
 myNew = putStrLn "New"
 
-myDodgyPlot = mapPlot (\(TS d) -> d) id linePlot
+myDodgyPlot = mapPlot (\(TS d) -> d) id (D.lw 1 . D.lc D.blueviolet <$> linePlot)
 
 myFileOpen :: IORef (ScopeDiag ViewCairo) -> G.FileChooserDialog -> G.ResponseId -> IO ()
 myFileOpen scopeRef fcdialog response = do

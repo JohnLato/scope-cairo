@@ -23,7 +23,8 @@ import qualified Graphics.Rendering.Cairo.Matrix as M
 import qualified Diagrams.Backend.Cairo as B
 import qualified Diagrams.Backend.Gtk as B
 import qualified Diagrams.Backend.Cairo.Internal as B
-import Diagrams.Prelude (SizeSpec2D(..), Diagram, R2, renderDia)
+import Diagrams.Prelude (SizeSpec2D(..), Diagram, R2, renderDia, showOrigin)
+import qualified Diagrams.Prelude as D
 
 import System.Locale (defaultTimeLocale)
 
@@ -43,7 +44,11 @@ updateCanvas ref = do
     win <- G.widgetGetDrawWindow c
     (width, height) <- G.widgetGetSize c
     diag <- plotWindow width height scope
-    B.renderToGtk win diag
+    let diag' = B.toGtkCoords
+                   . D.sized (D.Dims (fI width) (fI height))
+                   $ diag
+        fI = fromIntegral
+    B.renderToGtk win diag'
     return True
 
 writePng :: FilePath -> IORef (ScopeDiag ViewCairo) -> IO ()
