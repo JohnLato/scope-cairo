@@ -42,10 +42,13 @@ updateCanvas ref = do
     scope <- readIORef ref
     let c = canvas . viewUI . view $ scope
     win <- G.widgetGetDrawWindow c
-    (width, height) <- G.widgetGetSize c
+    s@(width, height) <- G.widgetGetSize c
     diag <- plotWindow width height scope
-    let diag' = B.toGtkCoords
-                   . D.sized (D.Dims (fI width) (fI height))
+    let (dw,dh) = D.size2D diag
+        gzero z f = if z == 0 then id else f
+        diag' = B.toGtkCoords
+                   . gzero dw (D.scaleToX $ fI width)
+                   . gzero dh (D.scaleToY $ fI height)
                    $ diag
         fI = fromIntegral
     B.renderToGtk win diag'
