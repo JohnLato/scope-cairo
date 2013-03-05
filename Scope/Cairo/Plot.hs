@@ -1,4 +1,6 @@
+{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE TupleSections #-}
 {-# LANGUAGE ViewPatterns #-}
 
 {-# OPTIONS -Wall #-}
@@ -43,7 +45,7 @@ updateCanvas ref = do
     let c = canvas . viewUI . view $ scope
     win <- G.widgetGetDrawWindow c
     s@(width, height) <- G.widgetGetSize c
-    diag <- plotWindow width height scope
+    diag <- plotWindow width height ref
     let (dw,dh) = D.size2D diag
         gzero z f = if z == 0 then id else f
         diag' = B.toGtkCoords
@@ -60,17 +62,36 @@ writePng path ref = do
     let c = canvas . viewUI . view $ scope
     (width, height) <- G.widgetGetSize c
     let dims = Dims (fromIntegral width) (fromIntegral height)
-    diag <- plotWindow width height scope
+    diag <- plotWindow width height ref
     fst $ renderDia B.Cairo (B.CairoOptions path dims B.PNG True) diag
 
 ----------------------------------------------------------------
 
-plotWindow :: Int -> Int -> ScopeDiag ViewCairo -> IO (Diagram B.Cairo R2)
-plotWindow width height scope = do
+plotWindow :: Int
+           -> Int
+           -> IORef (ScopeDiag ViewCairo)
+           -> IO (Diagram B.Cairo R2)
+plotWindow width height ref = do
     -- prologue width height
-    scopeRender width scope
+    scope <- readIORef ref
+    graph <- scopeRender width scope
+    let View{viewX,viewY} = view scope
+    atomicModifyIORef' ref ((,()) . setCacheIfCurrent graph viewX viewY)
     -- plotTimeline scope
     -- plotCursor scope
+    return graph
+
+setCacheIfCurrent :: (D.Monoid' m) =>
+                     D.QDiagram b R2 m
+                     -> Range DataX
+                     -> Range DataY
+                     -> Scope (D.QDiagram b R2 m) ui
+                     -> Scope (D.QDiagram b R2 m) ui
+setCacheIfCurrent diag rngX rngY scope@Scope{..} =
+    let View{viewX,viewY} = view
+    in if viewX == rngX && viewY == rngY
+          then setCache diag scope
+          else scope{scopeCache=Nothing}
 
 -- Set up stuff
 prologue :: Int -> Int -> C.Render ()
