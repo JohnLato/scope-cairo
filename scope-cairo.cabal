@@ -79,7 +79,7 @@ Library
     old-locale,
     scope                     >= 0.9.0.0 && < 0.10,
     time,
-    zoom-cache                >= 1.2.0.0 && < 1.3.0.0
+    zoom-cache                >= 1.2.0.0 && < 1.4.0.0
 
   Exposed-modules:
     Scope.Cairo
@@ -109,7 +109,7 @@ Executable scope-cairo
     old-locale,
     scope                     >= 0.9.0.0 && < 0.10,
     time,
-    zoom-cache                >= 1.2.0.0 && < 1.3.0.0
+    zoom-cache                >= 1.2.0.0 && < 1.4.0.0
 
 ------------------------------------------------------------------------
 -- Git repo
