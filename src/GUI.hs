@@ -134,7 +134,7 @@ myNew :: IO ()
 myNew = putStrLn "New"
 
 myDodgyPlot :: Plot TimeStamp (ScopeResult Double) (ScopeDiagram B.Cairo D.Any)
-myDodgyPlot = mapPlot (\(TS d) -> d) id (D.lw 1 . D.lc D.blueviolet <$> minMeanMaxPlot)
+myDodgyPlot = mapPlot (\(TS d) -> d) (\(_,m,_) -> m) (D.lw 1 . D.lc D.blueviolet <$> linePlot)
 
 myFileOpen :: IORef (ScopeDiag ViewCairo) -> G.FileChooserDialog -> G.ResponseId -> IO ()
 myFileOpen scopeRef fcdialog response = do
