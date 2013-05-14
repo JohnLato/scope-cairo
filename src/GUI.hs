@@ -133,7 +133,11 @@ myNew :: IO ()
 myNew = putStrLn "New"
 
 myDodgyPlot :: Plot TimeStamp (ScopeResult Double) (ScopeDiagram B.Cairo D.Any)
-myDodgyPlot = mapPlot (\(TS d) -> d) (\(_,m,_) -> m) (D.lw 1 . D.lc D.blueviolet <$> linePlot)
+myDodgyPlot = mapWithKey colors $ mapPlot (\(TS d) -> d) id minMeanMaxPlot
+  where
+    colors "fill" = D.fcA (D.blueviolet `D.withOpacity` 0.35)
+    colors "line" = D.lw 0.7 . D.lc D.black
+    colors _ = id
 
 myFileOpen :: IORef (ScopeDiag ViewCairo) -> G.FileChooserDialog -> G.ResponseId -> IO ()
 myFileOpen scopeRef fcdialog response = do
